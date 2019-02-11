@@ -1,0 +1,22 @@
+#1
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+%matplotlib inline
+
+# Load Aaron Judge's Statcast data
+judge = pd.read_csv('datasets/judge.csv')
+
+# Load Giancarlo Stanton's Statcast data
+stanton = pd.read_csv('datasets/stanton.csv')
+
+#2
+# Display all columns (pandas will collapse some columns if we don't set this option)
+pd.set_option('display.max_columns', None)
+
+# Display the last five rows of the Aaron Judge file
+# ... YOUR CODE FOR TASK 2 ...
+judge.tail()
+
+#3
+
