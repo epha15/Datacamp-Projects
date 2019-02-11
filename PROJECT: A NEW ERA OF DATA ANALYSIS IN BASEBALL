@@ -19,4 +19,27 @@ pd.set_option('display.max_columns', None)
 judge.tail()
 
 #3
+# All of Aaron Judge's batted ball events in 2017
+judge_events_2017 = judge.loc[judge['game_year']==2017].events
+print("Aaron Judge batted ball event totals, 2017:")
+print(judge_events_2017.value_counts())
 
+# All of Giancarlo Stanton's batted ball events in 2017
+stanton_events_2017 = stanton.loc[stanton['game_year']==2017].events
+print("\nGiancarlo Stanton batted ball event totals, 2017:")
+print(stanton_events_2017.value_counts())
+
+#4
+# Filter to include home runs only
+judge_hr = judge.loc[judge['events']=='home_run']
+stanton_hr = stanton.loc[stanton['events']=='home_run']
+
+# Create a figure with two scatter plots of launch speed vs. launch angle, one for each player's home runs
+fig1, axs1 = plt.subplots(ncols=2, sharex=True, sharey=True)
+sns.regplot(x='launch_speed', y='launch_angle', fit_reg=False, color='tab:blue', data=judge_hr, ax=axs1[0]).set_title('Aaron Judge\nHome Runs, 2015-2017')
+sns.regplot(x='launch_speed', y='launch_angle', fit_reg=False, color='tab:blue', data=stanton_hr, ax=axs1[1]).set_title('Giancarlo Stanton\nHome Runs, 2015-2017')
+
+# Create a figure with two KDE plots of launch speed vs. launch angle, one for each player's home runs
+fig2, axs2 = plt.subplots(ncols=2, sharex=True, sharey=True)
+sns.kdeplot(judge_hr['launch_speed'], judge_hr['launch_angle'], cmap="Blues", shade=True, shade_lowest=False, ax=axs2[0]).set_title('Aaron Judge\nHome Runs, 2015-2017')
+sns.kdeplot(stanton_hr['launch_speed'], stanton_hr['launch_angle'], cmap="Blues", shade=True, shade_lowest=False, ax=axs2[1]).set_title('Giancarlo Stanton\nHome Runs, 2015-2017')
