@@ -31,7 +31,7 @@ prop_usa_winners = nobel.groupby(by='decade', as_index=False)['usa_born_winner']
 # ... YOUR CODE FOR TASK 3 ...
 print(prop_usa_winners)
 
-#4 - lineplot can be used for PE spread!!
+#4 - lineplot can be used for PE spread!! Major formatter to convert to percent
 # Setting the plotting theme
 sns.set()
 # and setting the size of all plots.
@@ -44,3 +44,44 @@ ax = sns.lineplot(x='decade', y='usa_born_winner', data = nobel)
 # Adding %-formatting to the y-axis
 from matplotlib.ticker import PercentFormatter
 ax.yaxis.set_major_formatter(PercentFormatter(1.0))
+
+#5 Grouping with 2 columns
+# Calculating the proportion of female laureates per decade
+nobel['female_winner'] = nobel['sex'] =='Female'
+prop_female_winners = nobel.groupby(by=['decade','category'], as_index=False)['female_winner'].mean()
+# Plotting USA born winners with % winners on the y-axis
+ax = sns.lineplot(x='decade', y='female_winner', hue='category',data=prop_female_winners)
+ax.yaxis.set_major_formatter(PercentFormatter(1.0))
+
+#6 Pick largest or smallest in a column
+# Picking out the first woman to win a Nobel Prize
+nobel.loc[nobel['sex']=='Female'].nsmallest(1,'year')
+
+#7
+# Selecting the laureates that have received 2 or more prizes.
+print(nobel.groupby(by='full_name').filter(lambda group: len(group) >1))
+
+#8 linear relationship between 2 datapoints
+# Converting birth_date from String to datetime
+nobel['birth_date'] = pd.to_datetime(nobel['birth_date'], format ='%Y-%m-%d')
+
+# Calculating the age of Nobel Prize winners
+nobel['age'] = nobel['year'] - nobel['birth_date'].dt.year
+
+# Plotting the age of Nobel Prize winners
+sns.lmplot(x='year', y='age', data = nobel, lowess=True, aspect=2, line_kws={'color':'black'})
+
+#9 lmplot but using rows = several categories
+# Same plot as above, but separate plots for each type of Nobel Prize
+sns.lmplot(x='year', y='age', data = nobel, row='category', lowess = True, aspect=2, line_kws={'color':'black'})
+
+#10 largest and smallest
+# The oldest winner of a Nobel Prize as of 2016
+print(nobel.nlargest(1,'age')[['full_name','age']])
+
+# The youngest winner of a Nobel Prize as of 2016
+print(nobel.nsmallest(1,'age')[['full_name','age']])
+
+#11
+# The name of the youngest winner of the Nobel Prize as of 2016
+youngest_winner = 'Malala'
